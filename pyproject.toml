@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "typing_environs"
+version = "0.1.1"
+description = "### typing_environs add type hints support  for environs"
+authors = ["Euraxluo <euraxluo@qq.com>"]
+license = "The MIT LICENSE"
+readme = "README.md"
+homepage = "https://github.com/Euraxluo/typing_environs"
+repository = "https://github.com/Euraxluo/typing_environs"
+
+[tool.poetry.dependencies]
+python = "^3.6.5"
+environs = "^9.5.0"
+easydict = "^1.9"
+pydantic = "^0.0.0"
+
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
