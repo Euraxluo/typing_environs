@@ -1,12 +1,12 @@
 ### typing_environs 
 - name = "typing_environs"
-- description = "### typing_environs add type hints support  for environs"
+- description = "typing_environs add type hints support  for environs"
 - authors = ["Euraxluo <euraxluo@qq.com>"]
 - license = "The MIT LICENSE"
 - repository = "https://github.com/Euraxluo/typing_environs"
 
 #### install
-`pip install typing_environs`
+`pip install typing-environs`
 
 #### UseAge
 ```

@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "typing_environs"
-version = "0.1.1"
-description = "### typing_environs add type hints support  for environs"
+version = "0.1.3"
+description = "typing_environs add type hints support  for environs"
 authors = ["Euraxluo <euraxluo@qq.com>"]
 license = "The MIT LICENSE"
 readme = "README.md"
@@ -12,7 +12,7 @@ repository = "https://github.com/Euraxluo/typing_environs"
 python = "^3.6.5"
 environs = "^9.5.0"
 easydict = "^1.9"
-pydantic = "^0.0.0"
+pydantic = "^1.8.0"
 
 
 [tool.poetry.dev-dependencies]
