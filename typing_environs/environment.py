@@ -50,7 +50,7 @@ class Types(object):
 class MataBaseSetting(BaseSettings.__class__):
     def __init__(self, *args, **kwargs):
         super(MataBaseSetting, self).__init__(*args, **kwargs)
-        if self.__name__ != 'BaseSetting' and not hasattr(self, '__instance'):
+        if self.__name__ != 'EnvModule' and not hasattr(self, '__instance'):
             self.__instance = "__pre_call__"
 
     def __call__(self, *args, **kwargs):
@@ -80,7 +80,7 @@ class MataBaseSetting(BaseSettings.__class__):
 
 class EnvModule(BaseSettings, metaclass=MataBaseSetting):
     """
-    BaseSetting在进行初始化时,能够进行配置文件读取,并且将配置文件注入到类属性中
+    EnvModule在进行初始化时,能够进行配置文件读取,并且将配置文件注入到类属性中
     继承它,你就能获得该能力,该类的子类被实例化时,会进行配置文件读取和值的装载
 
     Param: paths,separator,override,strict
