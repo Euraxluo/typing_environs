@@ -92,6 +92,7 @@ class EnvModule(BaseSettings, metaclass=MataBaseSetting):
             init_kwargs,
             _env_file=None,
             _env_file_encoding=None,
+            _env_nested_delimiter=None,
             _secrets_dir=None
     ):
         paths = init_kwargs.get('paths', [])

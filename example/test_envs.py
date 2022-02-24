@@ -4,7 +4,7 @@
 # author: Euraxluo
 
 from unittest import TestCase
-from envs.models import *
+from .envs.models import *
 
 
 class Test(TestCase):
