@@ -1,16 +1,8 @@
-### typing_environs 
-- name = "typing_environs"
-- description = "typing_environs add type hints support  for environs"
-- authors = ["Euraxluo <euraxluo@qq.com>"]
-- license = "The MIT LICENSE"
-- repository = "https://github.com/Euraxluo/typing_environs"
-_ version = "0.1.*"
+# -*- coding: utf-8 -*- 
+# Time: 2021-08-30 14:03
+# Copyright (c) 2021
+# author: Euraxluo
 
-#### install
-`pip install typing-environs`
-
-#### UseAge
-```
 from typing_environs import EnvModule, Types
 
 
@@ -44,4 +36,16 @@ class Config(EnvModule):  # 默认配置
 
     def __init__(self, *args, paths=["default.env"], **kwargs):
         super(Config, self).__init__(*args, paths=paths, **kwargs)
-```
+
+
+def ConfigFactory(separator, strict, **kwargs) -> Config:
+    env_paths_mapping = {
+        'dev': ["dev.env", "default.env"],
+        'fat': ["fat.env", "default.env"],
+        'prod': ["prod.env", "default.env"],
+        'default': ["default.env"]
+    }
+    import os
+    env = os.environ.get('ENV', default='default').lower()
+    config = Config(separator=separator, strict=strict, paths=env_paths_mapping[env])  # 实例化对应的环境
+    return config

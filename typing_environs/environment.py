@@ -77,6 +77,13 @@ class MataBaseSetting(BaseSettings.__class__):
             return True
         return False
 
+    def __setattr__(self, key, value):
+        return super().__setattr__(key, value)
+
+    @property
+    def __envs__(self):
+        return {k: v for k, v in self.__dict__.items() if not k.startswith('_')}
+
 
 class EnvModule(BaseSettings, metaclass=MataBaseSetting):
     """
@@ -86,6 +93,7 @@ class EnvModule(BaseSettings, metaclass=MataBaseSetting):
     Param: paths,separator,override,strict
     """
     _MODEL_CLASSES = {}
+    __envs__ = None
 
     def _build_values(
             self,
@@ -142,11 +150,16 @@ class EnvModule(BaseSettings, metaclass=MataBaseSetting):
         mount_obj = self.__class__
         obj = None
         for i, name in enumerate(name_seq):
-            if not hasattr(mount_obj, name):
-                if name in templates or not strict:
-                    setattr(mount_obj, name, templates.get(name, lambda: EasyDict())())
+            if not hasattr(mount_obj, name) and not hasattr(mount_obj, separator.join(name_seq[i:])):
+                if name in templates or not strict or isinstance(mount_obj, EasyDict):
+                    setattr(mount_obj, name, EasyDict())
                 elif strict:
                     raise ValueError(f"unknown how to parse env:{obj_name},plz check user model:{self.__class__}")
+            elif (not hasattr(mount_obj, name) or isinstance(getattr(mount_obj, name), EasyDict)) and hasattr(mount_obj, separator.join(name_seq[i:])):
+                obj = mount_obj
+                mount_obj = getattr(mount_obj, separator.join(name_seq[i:]))
+                return obj, mount_obj, separator.join(name_seq[i:])
+
             obj = mount_obj
             mount_obj = getattr(mount_obj, name)
         return obj, mount_obj, name_seq[-1]

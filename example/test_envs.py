@@ -4,8 +4,9 @@
 # author: Euraxluo
 
 from unittest import TestCase
-from .envs.models import *
+from .envs2.models import Config as Config2
 
+from .envs.models import *
 
 class Test(TestCase):
     def get_config_class(self, config):
@@ -31,6 +32,11 @@ class Test(TestCase):
         print(d.log.fls.enqueue)
         print(d.log.fls.backtrace)
         print(d.log.fls.diagnose)
+        print(d.log.fls.__envs__)
+
+    def test_default_config2(self):
+        x = Config2(strict=True, separator='_', paths=["default.env"])
+        self.get_config_class(x)
 
     def test_default_config(self):
         x = Config(strict=True, separator='.', paths=["default.env"])
@@ -71,3 +77,7 @@ class Test(TestCase):
         os.environ['ENV'] = 'default'
         x = ConfigFactory(separator='.', strict=True)
         self.get_config_class(x)
+
+
+
+
