@@ -36,7 +36,11 @@ class Types(object):
 
     @staticmethod
     def dir(env, name):
-        return os.path.join(os.path.dirname(stack()[2][1]), Env.str(env, name))
+        value = Env.str(env, name)
+        if value:
+            return os.path.join(os.path.dirname(stack()[2][1]), )
+        else:
+            return value
 
     @staticmethod
     def lower(env, name):
