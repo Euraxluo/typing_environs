@@ -4,12 +4,13 @@
 # author: Euraxluo
 
 import os
+import copy
+import typing
+import warnings
 from inspect import *
 from environs import Env
 from easydict import EasyDict
 from pydantic import BaseSettings
-import typing
-import warnings
 
 
 class Types(object):
@@ -93,7 +94,7 @@ class EnvModule(BaseSettings, metaclass=MataBaseSetting):
     """
     EnvModule在进行初始化时,能够进行配置文件读取,并且将配置文件注入到类属性中
     继承它,你就能获得该能力,该类的子类被实例化时,会进行配置文件读取和值的装载
-
+    TIPS: 只会初始化一次哦
     Param: paths,separator,override,strict
     """
     _MODEL_CLASSES = {}
@@ -134,12 +135,24 @@ class EnvModule(BaseSettings, metaclass=MataBaseSetting):
                     setattr(obj, attr_name, attr(env, ek))
                     parse_cache.add(ek)
                 except ValueError as e:
-                    warnings.warn(f"Parse Warning: {e} ;locals: {env}, {ek}, {ev}, {ik}")
+                    warnings.warn(f"Parse Warning: {e} ;locals:{ek}, {ev}, {ik}")
                 except Exception as e:
-                    raise Exception(f"Parse Error: {e} ;locals: {env}, {ek}, {ev}, {ik}")
+                    raise Exception(f"Parse Error: {e} ;locals:{ek}, {ev}, {ik}")
         if len(parse_cache) == 0 and strict:
             raise Exception(f"Parse Warning,plz check your env, file:{[os.path.join(os.path.dirname(getfile(self.__class__)), path) for path in paths]},model:{self.__class__}")
         return self
+
+    def search(self, node, name_seq, height, separator, node_name=None):
+        if len(name_seq) == height:
+            return None, node, node_name
+        x = []
+        for o in [n for n in ['_'.join(j) for j in [copy.deepcopy(x) for i in name_seq[height:] if not x.append(i)]] if hasattr(node, n)]:
+            last, result, node_name = self.search(getattr(node, o), name_seq, height + len(set(o.split(separator))), separator, o)
+            if result is not None:
+                if last is None:
+                    last = node
+                return last, result, node_name
+        return None, None, node_name
 
     def get_named_attr(self, templates, obj_name, separator, strict) -> (object, object, str):
         """
@@ -152,18 +165,5 @@ class EnvModule(BaseSettings, metaclass=MataBaseSetting):
         # 构造对象
         name_seq = [i.lower() for i in obj_name.split(separator)]
         mount_obj = self.__class__
-        obj = None
-        for i, name in enumerate(name_seq):
-            if not hasattr(mount_obj, name) and not hasattr(mount_obj, separator.join(name_seq[i:])):
-                if name in templates or not strict or isinstance(mount_obj, EasyDict):
-                    setattr(mount_obj, name, EasyDict())
-                elif strict:
-                    raise ValueError(f"unknown how to parse env:{obj_name},plz check user model:{self.__class__}")
-            elif (not hasattr(mount_obj, name) or isinstance(getattr(mount_obj, name), EasyDict)) and hasattr(mount_obj, separator.join(name_seq[i:])):
-                obj = mount_obj
-                mount_obj = getattr(mount_obj, separator.join(name_seq[i:]))
-                return obj, mount_obj, separator.join(name_seq[i:])
-
-            obj = mount_obj
-            mount_obj = getattr(mount_obj, name)
-        return obj, mount_obj, name_seq[-1]
+        obj, attr, attr_name = self.search(mount_obj, name_seq, 0, separator)
+        return obj, attr, attr_name

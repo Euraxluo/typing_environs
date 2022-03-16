@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "typing_environs"
-version = "0.1.9"
+version = "0.1.10"
 description = "typing_environs add type hints support  for environs"
 authors = ["Euraxluo <euraxluo@qq.com>"]
 license = "The MIT LICENSE"
