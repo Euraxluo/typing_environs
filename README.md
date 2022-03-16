@@ -45,3 +45,6 @@ class Config(EnvModule):  # 默认配置
     def __init__(self, *args, paths=["default.env"], **kwargs):
         super(Config, self).__init__(*args, paths=paths, **kwargs)
 ```
+
+## todo list
+- [ ] strict mode
