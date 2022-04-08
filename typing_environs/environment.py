@@ -115,10 +115,18 @@ class EnvModule(BaseSettings, metaclass=MataBaseSetting):
         env = Env()
         # 从配置的路径列表中读取配置
         for path in paths:
+            if isinstance(path, dict):
+                for k, v in path.items():
+                    if k in os.environ and not override:
+                        continue
+                    if isinstance(v, str):
+                        os.environ[k] = v
+                continue
             env.read_env(path=os.path.join(os.path.dirname(getfile(self.__class__)), path), override=override)
         # 注释列表中获取属性,因此强制要求对象类型注解
         all_items = []
-        for c in [i for i in self.__class__.mro() if i.__module__ == self.__module__ and '__annotations__' in i.__dict__]:
+        for c in [i for i in self.__class__.mro() if
+                  i.__module__ == self.__module__ and '__annotations__' in i.__dict__]:
             for k, v in c.__annotations__.items():
                 if hasattr(self, k):
                     all_items.append(k)
@@ -126,7 +134,8 @@ class EnvModule(BaseSettings, metaclass=MataBaseSetting):
         # 获取所有的get函数,包括父类
         parse_cache = set()
         for ik in all_items:
-            all_envs = dict([(k, v) for k, v in os.environ.items() if k.startswith(ik.upper() + separator) or k == ik.upper() and k not in parse_cache])
+            all_envs = dict([(k, v) for k, v in os.environ.items() if
+                             k.startswith(ik.upper() + separator) or k == ik.upper() and k not in parse_cache])
             for ek, ev in all_envs.items():
                 try:
                     obj, attr, attr_name = self.get_named_attr(EnvModule._MODEL_CLASSES, ek, separator, strict)
@@ -139,15 +148,18 @@ class EnvModule(BaseSettings, metaclass=MataBaseSetting):
                 except Exception as e:
                     raise Exception(f"Parse Error: {e} ;locals:{ek}, {ev}, {ik}")
         if len(parse_cache) == 0 and strict:
-            raise Exception(f"Parse Warning,plz check your env, file:{[os.path.join(os.path.dirname(getfile(self.__class__)), path) for path in paths]},model:{self.__class__}")
+            raise Exception(
+                f"Parse Warning,plz check your env, file:{[os.path.join(os.path.dirname(getfile(self.__class__)), path) for path in paths if isinstance(path, str)]},model:{self.__class__}")
         return self
 
     def search(self, node, name_seq, height, separator, node_name=None):
         if len(name_seq) == height:
             return None, node, node_name
         x = []
-        for o in [n for n in ['_'.join(j) for j in [copy.deepcopy(x) for i in name_seq[height:] if not x.append(i)]] if hasattr(node, n)]:
-            last, result, node_name = self.search(getattr(node, o), name_seq, height + len(set(o.split(separator))), separator, o)
+        for o in [n for n in ['_'.join(j) for j in [copy.deepcopy(x) for i in name_seq[height:] if not x.append(i)]] if
+                  hasattr(node, n)]:
+            last, result, node_name = self.search(getattr(node, o), name_seq, height + len(set(o.split(separator))),
+                                                  separator, o)
             if result is not None:
                 if last is None:
                     last = node
