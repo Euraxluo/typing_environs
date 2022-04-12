@@ -146,7 +146,7 @@ class EnvModule(BaseSettings, metaclass=MataBaseSetting):
                 except ValueError as e:
                     warnings.warn(f"Parse Warning: {e} ;locals:{ek}, {ev}, {ik}")
                 except Exception as e:
-                    raise Exception(f"Parse Error: {e} ;locals:{ek}, {ev}, {ik}")
+                    warnings.warn(f"Parse Error: {e} ;locals:{ek}, {ev}, {ik}")
         if len(parse_cache) == 0 and strict:
             raise Exception(
                 f"Parse Warning,plz check your env, file:{[os.path.join(os.path.dirname(getfile(self.__class__)), path) for path in paths if isinstance(path, str)]},model:{self.__class__}")

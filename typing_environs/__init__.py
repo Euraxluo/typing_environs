@@ -6,6 +6,6 @@
 from .environment import EnvModule, Types
 
 name = "typing_environs"
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __description__ = """typing_environs add type hints support  for environs"""
 __all__ = ["EnvModule", "Types"]
