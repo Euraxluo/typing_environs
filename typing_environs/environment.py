@@ -39,7 +39,7 @@ class Types(object):
     def dir(env, name):
         value = Env.str(env, name)
         if value:
-            return os.path.join(os.path.dirname(stack()[2][1]), )
+            return os.path.abspath(value)
         else:
             return value
 

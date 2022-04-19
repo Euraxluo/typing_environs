@@ -4,7 +4,7 @@
 - authors = ["Euraxluo <euraxluo@qq.com>"]
 - license = "The MIT LICENSE"
 - repository = "https://github.com/Euraxluo/typing_environs"
-_ version = "0.2.*"
+_ version = "0.3.*"
 
 #### install
 `pip install typing-environs`
