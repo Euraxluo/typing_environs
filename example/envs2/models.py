@@ -2,13 +2,13 @@
 # Time: 2021-08-30 14:03
 # Copyright (c) 2021
 # author: Euraxluo
-
+import typing_environs.environment
 from typing_environs import EnvModule, Types
 
 
 class FLS(EnvModule):
     open: Types.bool
-    level: Types.upper
+    level: Types.bool = "sasa"
     dir: Types.dir
     rotation: Types.str
     retention: Types.str
@@ -26,8 +26,9 @@ class Log(EnvModule):
     fls: FLS
 
 
+@EnvModule.export()
 class Config(EnvModule):  # 默认配置
-    env: Types.str
+    env: Types.str = 1
     application: Types.str
     version: Types.str
     data_separator: Types.str

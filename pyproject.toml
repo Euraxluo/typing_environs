@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "typing_environs"
-version = "0.3.0"
+version = "0.4.0"
 description = "typing_environs add type hints support  for environs"
 authors = ["Euraxluo <euraxluo@qq.com>"]
 license = "The MIT LICENSE"
@@ -20,3 +20,7 @@ pydantic = "1.9.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.scripts]
+type_env_export = 'typing_environs.environment:cli'
