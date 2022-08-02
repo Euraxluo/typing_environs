@@ -27,7 +27,7 @@ class Log(EnvModule):
 
 
 class Config(EnvModule):  # 默认配置
-    env: Types.str
+    env: Types.str=1
     application: Types.str
     version: Types.str
     data_separator: Types.str

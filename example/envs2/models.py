@@ -26,7 +26,7 @@ class Log(EnvModule):
     fls: FLS
 
 
-@EnvModule.export()
+# @EnvModule.export()
 class Config(EnvModule):  # 默认配置
     env: Types.str = 1
     application: Types.str

@@ -142,12 +142,10 @@ class EnvModule(BaseSettings, metaclass=MataBaseSetting):
             for ek, ev in all_envs.items():
                 try:
                     obj, attr, attr_name = self.get_named_attr(EnvModule._MODEL_CLASSES, ek, separator, strict)
-                    if attr.__class__ == EasyDict and attr == {}:
-                        attr = Env.str
-                    elif attr not in Types.__dict__.values():
-                        setattr(obj, attr_name, attr)
-                    else:
+                    if isfunction(attr):
                         setattr(obj, attr_name, attr(env, ek))
+                    else:
+                        setattr(obj, attr_name, attr)
                     parse_cache.add(ek)
                 except ValueError as e:
                     warnings.warn(f"Parse Warning: {e} ;locals:{ek}, {ev}, {ik}")
